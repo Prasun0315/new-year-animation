@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy New Year 2026</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Poppins",sans-serif;
+}
+
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  overflow:hidden;
+  transition:background 1.5s ease;
+}
+
+/* Start screen */
+.start{
+  position:fixed;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(12px);
+  color:white;
+  font-size:1.4rem;
+  z-index:10;
+  cursor:pointer;
+}
+
+/* Story card */
+.story{
+  width:360px;
+  height:640px;
+  background:rgba(255,255,255,0.88);
+  border-radius:40px;
+  padding:35px 25px;
+  text-align:center;
+  color:#333;
+  box-shadow:0 25px 60px rgba(0,0,0,0.35);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  z-index:2;
+}
+
+h1{font-size:2.2rem;}
+h2{margin:10px 0 20px; color:#666;}
+
+#text{
+  font-size:1.05rem;
+  line-height:1.8;
+  min-height:170px;
+}
+
+.cursor{
+  display:inline-block;
+  width:2px;
+  height:1.1em;
+  background:#555;
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{50%{opacity:0;}}
+
+/* Floating hearts */
+.float{
+  position:absolute;
+  font-size:18px;
+  animation:float 6s linear forwards;
+  opacity:0.9;
+}
+
+@keyframes float{
+  0%{transform:translateY(0);opacity:0;}
+  20%{opacity:1;}
+  100%{transform:translateY(-110vh);opacity:0;}
+}
+
+/* FULL SCREEN HEART BURST */
+.full-burst{
+  position:fixed;
+  inset:0;
+  z-index:9;
+  pointer-events:none;
+}
+
+.full-burst span{
+  position:absolute;
+  font-size:26px;
+  animation:burst 2s ease forwards;
+}
+
+@keyframes burst{
+  0%{transform:scale(0);opacity:1;}
+  100%{
+    transform:translate(var(--x),var(--y)) scale(1.2);
+    opacity:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="start" onclick="startShow()">Tap to start ✨</div>
+
+<div class="story">
+  <h1>Happy New Year 🎀</h1>
+  <h2>2026</h2>
+  <p id="text"></p><span class="cursor"></span>
+</div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/download/audio/2022/10/09/audio_6e5c6edbb0.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const slides=[
+ {bg:"linear-gradient(135deg,#232526,#414345)",
+  text:"Hey BADARNII 🌙\n\nJust a calm little New Year wish for you."},
+
+ {bg:"linear-gradient(135deg,#1f1c2c,#928dab)",
+  text:"A new year starts quietly ✨\nWith soft hope and gentle thoughts."},
+
+ {bg:"linear-gradient(135deg,#0f2027,#203a43)",
+  text:"I hope 2026 brings you peace 🤍\nThe kind that stays."},
+
+ {bg:"linear-gradient(135deg,#42275a,#734b6d)",
+  text:"May your days feel lighter 🌸\nAnd your nights feel safe."},
+
+ {bg:"linear-gradient(135deg,#2c3e50,#bdc3c7)",
+  text:"Happy New Year, BADARNII 💖\n\nFrom someone who truly wishes you the best."}
+];
+
+let s=0,c=0;
+const textBox=document.getElementById("text");
+const music=document.getElementById("music");
+
+function type(){
+  if(c<slides[s].text.length){
+    textBox.textContent+=slides[s].text.charAt(c);
+    c++;
+    setTimeout(type,45);
+  }else{
+    setTimeout(next,2200);
+  }
+}
+
+function next(){
+  s++;
+  if(s>=slides.length){
+    bigHeartBurst();
+    return;
+  }
+  c=0;
+  textBox.textContent="";
+  document.body.style.background=slides[s].bg;
+  type();
+}
+
+function startShow(){
+  document.querySelector(".start").style.display="none";
+  music.play();
+  document.body.style.background=slides[0].bg;
+  type();
+}
+
+/* Floating hearts continuously */
+const icons=["💖","🌸","✨","💗"];
+setInterval(()=>{
+  const el=document.createElement("div");
+  el.className="float";
+  el.textContent=icons[Math.floor(Math.random()*icons.length)];
+  el.style.left=Math.random()*100+"vw";
+  el.style.animationDuration=(Math.random()*3+4)+"s";
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),7000);
+},300);
+
+/* BIG FULL SCREEN HEART BURST */
+function bigHeartBurst(){
+  const layer=document.createElement("div");
+  layer.className="full-burst";
+  for(let i=0;i<120;i++){
+    const h=document.createElement("span");
+    h.textContent="💖";
+    h.style.left="50%";
+    h.style.top="50%";
+    h.style.setProperty("--x",(Math.random()*800-400)+"px");
+    h.style.setProperty("--y",(Math.random()*800-400)+"px");
+    layer.appendChild(h);
+  }
+  document.body.appendChild(layer);
+}
+</script>
+
+</body>
+</html>
